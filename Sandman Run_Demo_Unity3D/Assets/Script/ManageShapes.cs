@@ -15,10 +15,13 @@ public class ManageShapes : MonoBehaviour
         _mesh = GetComponent<MeshFilter>().mesh;
         GetComponent<SkinnedMeshRenderer>().BakeMesh(_mesh);
 
+        _mesh.RecalculateBounds();
+        _mesh.RecalculateNormals();
+        _mesh.RecalculateTangents();
+
         InitializeStickMan();
         CreateStickMan();
     }
-
     private void InitializeStickMan()
     {
         _vertices = new Vector3[_mesh.vertices.Length];
@@ -29,8 +32,7 @@ public class ManageShapes : MonoBehaviour
     {
         var a = 0;
         var spawnedPositions = new List<Vector3>();
-
-        for(int i = 0; i< _vertices.Length; i++)
+        for (int i = 0; i< _vertices.Length; i++)
         {
             a++;
             if (a / 10 == 1) // Only instantiating sphere on 10% of the vertices to gain performance in runtime.
@@ -46,6 +48,10 @@ public class ManageShapes : MonoBehaviour
                 }
             }
         }
+
+        Instantiate(Resources.Load("Prefabs/GameManager"), Vector3.zero, Quaternion.identity); // I instantiate GameManager object with GameManager script attached to it
+                                                                                               // after instantiated spheres because I wanted to execute
+                                                                                               // GameManager script "Start()" after the spheres "Start()".
 
         GameObject.Find("Alpha_Surface").SetActive(false);
         GameObject.Find("Alpha_Joints").SetActive(false);
