@@ -67,7 +67,6 @@ public class SphereParents : MonoBehaviour
         {
             if(transform.childCount > 0)
             {
-                Debug.Log("Childcount > 0");
                 if (!GameManager.limbs.isCurrentlySortingPositions)
                     StartCoroutine(GameManager.limbs.SortAllSphereChildsAfterOneSecond());
 

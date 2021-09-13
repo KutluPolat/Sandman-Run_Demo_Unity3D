@@ -16,21 +16,40 @@ public class SphereRegenerator : MonoBehaviour
     private void LerpToParent()
     {
         var SpheresThatManagedToReachTheHisParent = 0;
-        foreach (GameObject sphereChild in sphereChilds)
+
+        for (int i = 0; i < sphereChilds.Length; i++)
         {
-            sphereChild.transform.position = Vector3.Lerp(sphereChild.transform.position, sphereChild.transform.parent.position, 5 * Time.deltaTime);
-            if (Vector3.Distance(sphereChild.transform.parent.position, sphereChild.transform.position) < 0.05f)
+            if (sphereChilds[i] == null) // If this sphereChilds element is destroyed, counting this element as succeed to reach his parent is necessary to be able to continue to the algorithm.
             {
                 SpheresThatManagedToReachTheHisParent++;
-            }
-            else
-            {
-                // Do nothing.
+
+                if (SpheresThatManagedToReachTheHisParent == sphereChilds.Length) // If all of sphereChilds array element is null, destroy this regenerator.
+                {
+                    Destroy(gameObject);
+                    return;
+                }
             }
         }
-        if (SpheresThatManagedToReachTheHisParent == sphereChilds.Length)
+            
+
+        foreach (GameObject sphereChild in sphereChilds)
         {
-            Debug.Log("Lerp done!");
+            if (sphereChild != null) // Only lerp gameObjects that not equal to null.
+            {
+                sphereChild.transform.position = Vector3.Lerp(sphereChild.transform.position, sphereChild.transform.parent.position, 5 * Time.deltaTime);
+                if (Vector3.Distance(sphereChild.transform.parent.position, sphereChild.transform.position) < 0.05f)
+                {
+                    SpheresThatManagedToReachTheHisParent++;
+                }
+                else
+                {
+                    // Do nothing.
+                }
+            }
+        }
+
+        if (SpheresThatManagedToReachTheHisParent == sphereChilds.Length) // If all sphereChilds array elements is reached his parent or is null, destroy this regenerator.
+        {
             Destroy(gameObject);
         }
             
@@ -41,8 +60,8 @@ public class SphereRegenerator : MonoBehaviour
         if (!isAbleToStartLerp)
         {
             isAbleToStartLerp = true;
-            Debug.Log("Length: " + sphereChilds.Length);
             sphereChildsIndex = sphereChilds.Length - 1;
+            GameManager.limbs.CalculateAllAvailabilitiesByCount();
             SetParentsOfSphereChilds();
             GameManager.limbs.CalculateAllAvailabilitiesByCount();
             Destroy(GetComponent<SphereCollider>());
@@ -57,6 +76,15 @@ public class SphereRegenerator : MonoBehaviour
         SetParentsOfSphereChildsByLimbs(GameManager.limbs.spheresOf_RightArm);
         SetParentsOfSphereChildsByLimbs(GameManager.limbs.spheresOf_LeftArm);
         SetParentsOfSphereChildsByLimbs(GameManager.limbs.spheresOf_Head);
+
+        if(sphereChildsIndex != 0) // If there's not enough parent for these childs
+        {
+            for (int i = sphereChildsIndex; i >= 0; i--) // Destroy childs that not have parent
+            {
+                Debug.Log("Destoreyd");
+                Destroy(sphereChilds[i]);
+            }
+        }
     }
 
     private void SetParentsOfSphereChildsByLimbs(List<GameObject> mainLimbSphereList)
@@ -70,7 +98,6 @@ public class SphereRegenerator : MonoBehaviour
             {
                 if (sphereChildsIndex >= 0)
                 {
-                    Debug.Log(" Set Parent");
                     sphereChilds[sphereChildsIndex].transform.SetParent(mainLimbSphereList[i].transform);
                     sphereChilds[sphereChildsIndex].transform.parent.gameObject.AddComponent<SphereCollider>().radius = sphereChilds[sphereChildsIndex].transform.localScale.x * 5; // 5 is constant.
                     sphereChilds[sphereChildsIndex].AddComponent<SphereChilds>();

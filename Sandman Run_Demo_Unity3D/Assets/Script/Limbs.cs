@@ -175,7 +175,17 @@ public class Limbs
 
     public void TakeActionBasedOnAvailablity()
     {
-        if (chestAvailability < 0.1f && chestAvailability > 0) // If chest collapse, collapse everything.
+        var isAllLimbsAvaible = true;
+
+        if (leftLegAvailability < 0.3f && rightLegAvailability < 0.3f
+            && leftArmAvailability < 0.3f && rightArmAvailability < 0.3f)
+        {
+            Debug.Log("All limbs collapsed");
+            isAllLimbsAvaible = false;
+        }
+            
+        if (chestAvailability < 0.1f && chestAvailability > 0 || !isAllLimbsAvaible) // If chest collapse, collapse everything 
+                                                               // or if all four limb that responsiblefrom movement collapsed, collapse everything.
         {
             MakeAllSpheresFallAfterBreakPoints(spheresOf_LeftArm[0], spheresOf_LeftArm);
             MakeAllSpheresFallAfterBreakPoints(spheresOf_RightArm[0], spheresOf_RightArm);
@@ -184,25 +194,10 @@ public class Limbs
             MakeAllSpheresFallAfterBreakPoints(spheresOf_Head[0], spheresOf_Head);
         }
 
-        if (chestAvailability < 0.85f && chestAvailability > 0)
+        if (chestAvailability < 0.85f && chestAvailability > 0 || !isAllLimbsAvaible)
         {
             MakeAllSpheresFallAfterBreakPoints(spheresOf_LeftLeg[0], spheresOf_LeftLeg);
             MakeAllSpheresFallAfterBreakPoints(spheresOf_RightLeg[0], spheresOf_RightLeg);
         }
-
-        if (leftLegAvailability < 0.1f && chestAvailability > 0)
-            MakeAllSpheresFallAfterBreakPoints(spheresOf_LeftLeg[0], spheresOf_LeftLeg);
-
-        if (rightLegAvailability < 0.1f && chestAvailability > 0)
-            MakeAllSpheresFallAfterBreakPoints(spheresOf_RightLeg[0], spheresOf_RightLeg);
-
-        if (leftArmAvailability < 0.1f && chestAvailability > 0)
-            MakeAllSpheresFallAfterBreakPoints(spheresOf_LeftArm[0], spheresOf_LeftArm);
-
-        if (rightArmAvailability < 0.1f && chestAvailability > 0)
-            MakeAllSpheresFallAfterBreakPoints(spheresOf_RightArm[0], spheresOf_RightArm);
-
-        if (headAvailability < 0.1f && chestAvailability > 0)
-            MakeAllSpheresFallAfterBreakPoints(spheresOf_Head[0], spheresOf_Head);
     }
 }
