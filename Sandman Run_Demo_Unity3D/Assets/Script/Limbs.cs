@@ -109,10 +109,16 @@ public class Limbs
         }
     }
 
-    public void MakeSpheresFall(GameObject sphere, List<GameObject> sphereListsBasedOnLimbs, GameObject obstacle)
+    public void MakeSpheresFall(GameObject parentSphere, List<GameObject> sphereListsBasedOnLimbs, GameObject obstacle)
     {
+        if (parentSphere.transform.childCount == 0) // If the sphere that going to start algorithm is already childless, destroy spherecollider and return.
+        {
+            Object.Destroy(parentSphere.transform.GetComponent<SphereCollider>());
+            return;
+        }
+
         var breakPointCounter = 0;
-        for (int i = sphereListsBasedOnLimbs.IndexOf(sphere); i < sphereListsBasedOnLimbs.Count; i++)
+        for (int i = sphereListsBasedOnLimbs.IndexOf(parentSphere); i < sphereListsBasedOnLimbs.Count; i++)
         {
             breakPointCounter++;
             if(breakPointCounter >= 100) // If there's a hundred empty sphere parent, collapse everything after current index

@@ -35,7 +35,7 @@ public class ManageShapes : MonoBehaviour
         for (int i = 0; i< _vertices.Length; i++)
         {
             verticesCounter++;
-            if (verticesCounter % 10 == 0) // Only instantiating sphere on 10% of the vertices to gain performance in runtime.
+            if (verticesCounter % 25 == 0) // Only instantiating sphere on 4% of the vertices to gain performance in runtime.
             {
                 if (!spawnedPositions.Contains(_vertices[i])) // I'm blocking any chance of overlapping to gain performance in runtime.
                 {

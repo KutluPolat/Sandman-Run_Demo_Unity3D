@@ -1,15 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public static Limbs limbs = new Limbs();
+
+    private bool _youLose;
     private Animator animatorOf3DModel; // Animator that attached to "ybot@Idle"
+    private GameObject _3DModel;// 3D model is "ybot@Idle"
 
     private void Start()
     {
         animatorOf3DModel = GameObject.Find("ybot@Idle").GetComponent<Animator>();
+        _3DModel = GameObject.Find("ybot@Idle");
+
         InvokeRepeating("SetAnimationBasedOnAvailability", 0, 0.1f);
         limbs.SetInitialCountsAndSortListst();
     }
@@ -53,5 +59,12 @@ public class GameManager : MonoBehaviour
             Debug.Log("CrawlWithLeftArm");
             animatorOf3DModel.SetTrigger("CrawlWithLeftArm");
         }
+    }
+
+
+    public void Restart()
+    {
+        SceneManager.LoadScene("SampleScene");
+        limbs = new Limbs();
     }
 }

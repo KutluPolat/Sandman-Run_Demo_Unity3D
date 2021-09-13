@@ -11,8 +11,8 @@ public class CameraManager : MonoBehaviour
     }
     private void FixedUpdate()
     {
-        transform.position = Vector3.Lerp(transform.position, 
-            new Vector3(_playerPos.transform.position.x, transform.position.y, _playerPos.transform.position.z - 5), 
-            3f * Time.deltaTime);
+        transform.position = Vector3.Lerp(transform.position,
+                        new Vector3(_playerPos.transform.position.x, transform.position.y, _playerPos.transform.position.z - 5),
+                        3f * Time.deltaTime);
     }
 }
