@@ -81,7 +81,6 @@ public class SphereRegenerator : MonoBehaviour
         {
             for (int i = sphereChildsIndex; i >= 0; i--) // Destroy childs that not have parent
             {
-                Debug.Log("Destoreyd");
                 Destroy(sphereChilds[i]);
             }
         }
