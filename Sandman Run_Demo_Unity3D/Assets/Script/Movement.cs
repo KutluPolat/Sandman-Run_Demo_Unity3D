@@ -46,7 +46,7 @@ public class Movement : MonoBehaviour
             if (Input.touches[0].phase == TouchPhase.Moved)
             {
                 transform.position = new Vector3(
-                    transform.position.x + Input.touches[0].deltaPosition.x * 0.0005f,
+                    transform.position.x + Input.touches[0].deltaPosition.x * 0.001f,
                     transform.position.y,
                     transform.position.z);
 
