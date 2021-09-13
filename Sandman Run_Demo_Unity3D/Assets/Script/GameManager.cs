@@ -8,14 +8,7 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
-        Debug.Log(limbs.spheresOf_Head.Count);
-
         limbs.SetInitialCountsAndSortListst();
-
-        foreach(GameObject Chest in limbs.spheresOf_Chest)
-        {
-            Debug.Log(Chest.transform.parent.name);
-        }
     }
 
     private void Update()

@@ -152,7 +152,7 @@ public class Limbs
         SortAllSphereChilds();
         isCurrentlySortingPositions = false;
     }
-    private void CalculateAllAvailabilitiesByCount()
+    public void CalculateAllAvailabilitiesByCount()
     {
         leftArmAvailability = CalculateSingleAvailabilityByCount(_initialCountOf_LeftArm, spheresOf_LeftArm);
         rightArmAvailability = CalculateSingleAvailabilityByCount(_initialCountOf_RightArm, spheresOf_RightArm);

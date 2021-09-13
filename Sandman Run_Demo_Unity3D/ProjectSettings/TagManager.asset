@@ -6,6 +6,7 @@ TagManager:
   tags:
   - MainLimb
   - Obstacle
+  - SphereRegenerator
   layers:
   - Default
   - TransparentFX
