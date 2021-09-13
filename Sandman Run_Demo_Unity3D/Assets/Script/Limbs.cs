@@ -148,7 +148,7 @@ public class Limbs
     public IEnumerator SortAllSphereChildsAfterOneSecond()
     {
         isCurrentlySortingPositions = true;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(0.1f);
         SortAllSphereChilds();
         isCurrentlySortingPositions = false;
     }
@@ -173,7 +173,7 @@ public class Limbs
         return counter / initialCount;
     }
 
-    public void TakeActionBasedOnAvailablity()
+    public void CollapseAllLimbsIfChestOrAllLimbsThatMovesCollapses()
     {
         var isAllLimbsAvaible = true;
 

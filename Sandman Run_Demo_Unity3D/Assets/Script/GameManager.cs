@@ -5,14 +5,53 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static Limbs limbs = new Limbs();
+    private Animator animatorOf3DModel; // Animator that attached to "ybot@Idle"
 
     private void Start()
     {
+        animatorOf3DModel = GameObject.Find("ybot@Idle").GetComponent<Animator>();
+        InvokeRepeating("SetAnimationBasedOnAvailability", 0, 0.1f);
         limbs.SetInitialCountsAndSortListst();
     }
 
     private void Update()
     {
-        limbs.TakeActionBasedOnAvailablity();
+        limbs.CollapseAllLimbsIfChestOrAllLimbsThatMovesCollapses();
+    }
+
+    private void SetAnimationBasedOnAvailability()
+    {
+        limbs.CalculateAllAvailabilitiesByCount();
+
+        if(limbs.rightLegAvailability > 0.7f && limbs.leftLegAvailability > 0.7f)
+        {
+            Debug.Log("Run");
+            animatorOf3DModel.SetTrigger("Run");
+        }
+        else if(limbs.rightLegAvailability > 0.7f)
+        {
+            Debug.Log("RunWithRightLeg");
+            animatorOf3DModel.SetTrigger("RunWithRightLeg");
+        }
+        else if(limbs.leftLegAvailability > 0.7f)
+        {
+            Debug.Log("RunWithLeftLeg");
+            animatorOf3DModel.SetTrigger("RunWithLeftLeg");
+        }
+        else if(limbs.leftArmAvailability > 0.3f && limbs.rightArmAvailability > 0.3f)
+        {
+            Debug.Log("Crawl");
+            animatorOf3DModel.SetTrigger("Crawl");
+        }
+        else if(limbs.rightArmAvailability > 0.3f)
+        {
+            Debug.Log("CrawlWithRightArm");
+            animatorOf3DModel.SetTrigger("CrawlWithRightArm");
+        }
+        else if(limbs.leftArmAvailability > 0.3f)
+        {
+            Debug.Log("CrawlWithLeftArm");
+            animatorOf3DModel.SetTrigger("CrawlWithLeftArm");
+        }
     }
 }

@@ -34,7 +34,7 @@ public class SphereRegenerator : MonoBehaviour
 
         foreach (GameObject sphereChild in sphereChilds)
         {
-            if (sphereChild != null) // Only lerp gameObjects that not equal to null.
+            if (sphereChild != null && sphereChild.transform.parent != null) // Only lerp gameObjects that not equal to null.
             {
                 sphereChild.transform.position = Vector3.Lerp(sphereChild.transform.position, sphereChild.transform.parent.position, 5 * Time.deltaTime);
                 if (Vector3.Distance(sphereChild.transform.parent.position, sphereChild.transform.position) < 0.05f)
