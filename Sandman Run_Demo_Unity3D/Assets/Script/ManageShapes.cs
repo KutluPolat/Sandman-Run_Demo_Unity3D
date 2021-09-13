@@ -7,7 +7,7 @@ public class ManageShapes : MonoBehaviour
     private Mesh _mesh;
     public GameObject blueSphere;
     public GameObject[] limbs; // Assign all the limbs (don't have to assign small limbs like fingers & toes)
-    public GameObject[] baseLimbs; // Assign base limbs (just legs, arms and head)
+    public GameObject[] baseLimbs; // Assign base limbs (legs, arms, head and chest)
     private Vector3[] _vertices;
     private void Awake()
     {
@@ -30,14 +30,13 @@ public class ManageShapes : MonoBehaviour
 
     private void CreateStickMan()
     {
-        var a = 0;
+        var verticesCounter = 0;
         var spawnedPositions = new List<Vector3>();
         for (int i = 0; i< _vertices.Length; i++)
         {
-            a++;
-            if (a / 10 == 1) // Only instantiating sphere on 10% of the vertices to gain performance in runtime.
+            verticesCounter++;
+            if (verticesCounter % 10 == 0) // Only instantiating sphere on 10% of the vertices to gain performance in runtime.
             {
-                a = 0;
                 if (!spawnedPositions.Contains(_vertices[i])) // I'm blocking any chance of overlapping to gain performance in runtime.
                 {
                     GameObject spawnedSphere = Instantiate(blueSphere, _vertices[i], Quaternion.identity);
@@ -56,21 +55,21 @@ public class ManageShapes : MonoBehaviour
         GameObject.Find("Alpha_Surface").SetActive(false);
         GameObject.Find("Alpha_Joints").SetActive(false);
     }
-    private Transform FindClosestTransform(Vector3 spawnedSpherePosition, GameObject[] array)
+    private Transform FindClosestTransform(Vector3 spawnedSpherePosition, GameObject[] limbs)
     {
         // Distance between the first limb and spawned object is assigned to shortestDistance variable. Also, transform of the first limb is assigned to transformHolder.
         // If there's a limb closer to the first limb, the algorithm will find it and replaces this variable with new ones.
 
-        var shortestDistance = Vector3.Distance(array[0].transform.position, spawnedSpherePosition);
-        var transformHolder = array[0].transform;
+        var shortestDistance = Vector3.Distance(limbs[0].transform.position, spawnedSpherePosition);
+        var transformHolder = limbs[0].transform;
 
-        for (int i = 0; i < array.Length; i++)
+        for (int i = 0; i < limbs.Length; i++)
         {
-            var currentDistance = Vector3.Distance(array[i].transform.position, spawnedSpherePosition);
+            var currentDistance = Vector3.Distance(limbs[i].transform.position, spawnedSpherePosition);
             if (currentDistance < shortestDistance)
             {
                 shortestDistance = currentDistance;
-                transformHolder = array[i].transform;
+                transformHolder = limbs[i].transform;
             }
         }
         return transformHolder;

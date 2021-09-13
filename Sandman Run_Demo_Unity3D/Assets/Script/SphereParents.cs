@@ -7,33 +7,24 @@ public class SphereParents : MonoBehaviour
     private bool _belongsToLeftArm, _belongsToRightArm, _belongsToLeftLeg, _belongsToRightLeg, _belongsToChest, _belongsToHead;
     private void Start()
     {
-        FindClosestMainLimb();
+        FindClosestMainLimb(transform);
     }
 
-    private void FindClosestMainLimb()
+    private void FindClosestMainLimb(Transform recursive)
     {
-        Transform temporaryTransform;
-        if(transform.parent.tag == "MainLimb") // If the current object already is a parent of a main limb, set required data and return.
+        if (recursive.parent == null)
         {
-            SetRequiredData(transform.parent);
             return;
         }
-        else
+
+        if(recursive.parent.tag == "MainLimb") // If the current object already is a parent of a main limb, set required data and return.
         {
-            temporaryTransform = transform.parent; // If not, start to check parents of parents and continue untill find one main limb.
-            for (int i = 0; i < 20; i++)
-            {
-                if(temporaryTransform.parent.tag == "MainLimb")
-                {
-                    SetRequiredData(temporaryTransform.parent);
-                    return;
-                }
-                else
-                {
-                    temporaryTransform = temporaryTransform.parent;
-                }
-            }
+            SetRequiredData(recursive.parent);
+            return;
         }
+
+        FindClosestMainLimb(recursive.parent);
+
     }
     private void SetRequiredData(Transform mainLimb)
     {
@@ -64,7 +55,7 @@ public class SphereParents : MonoBehaviour
                 _belongsToRightArm = true;
                 break;
 
-            case "mixamorig:Head":
+            case "mixamorig:Neck": // Head
                 GameManager.limbs.spheresOf_Head.Add(gameObject);
                 _belongsToHead = true;
                 break;
@@ -76,23 +67,27 @@ public class SphereParents : MonoBehaviour
         {
             if(transform.childCount > 0)
             {
-                if(_belongsToLeftArm)
-                    GameManager.limbs.MakeAllObjectsFallAfterBreakPoints(gameObject, GameManager.limbs.spheresOf_LeftArm);
+                if (!GameManager.limbs.isCurrentlySortingPositions)
+                    StartCoroutine(GameManager.limbs.SortAllSphereChildsAfterOneSecond());
+
+
+                if (_belongsToLeftArm) 
+                    GameManager.limbs.MakeSpheresFall(gameObject, GameManager.limbs.spheresOf_LeftArm, other.gameObject);
 
                 else if (_belongsToRightArm)
-                    GameManager.limbs.MakeAllObjectsFallAfterBreakPoints(gameObject, GameManager.limbs.spheresOf_RightArm);
+                    GameManager.limbs.MakeSpheresFall(gameObject, GameManager.limbs.spheresOf_RightArm, other.gameObject);
 
                 else if (_belongsToLeftLeg)
-                    GameManager.limbs.MakeAllObjectsFallAfterBreakPoints(gameObject, GameManager.limbs.spheresOf_LeftLeg);
+                    GameManager.limbs.MakeSpheresFall(gameObject, GameManager.limbs.spheresOf_LeftLeg, other.gameObject);
 
                 else if (_belongsToRightLeg)
-                    GameManager.limbs.MakeAllObjectsFallAfterBreakPoints(gameObject, GameManager.limbs.spheresOf_RightLeg);
+                    GameManager.limbs.MakeSpheresFall(gameObject, GameManager.limbs.spheresOf_RightLeg, other.gameObject);
 
                 else if (_belongsToChest)
-                    GameManager.limbs.MakeAllObjectsFallAfterBreakPoints(gameObject, GameManager.limbs.spheresOf_Chest);
+                    GameManager.limbs.MakeSpheresFall(gameObject, GameManager.limbs.spheresOf_Chest, other.gameObject);
 
                 else if (_belongsToHead)
-                    GameManager.limbs.MakeAllObjectsFallAfterBreakPoints(gameObject, GameManager.limbs.spheresOf_Head);
+                    GameManager.limbs.MakeSpheresFall(gameObject, GameManager.limbs.spheresOf_Head, other.gameObject);
             }
         }
     }
